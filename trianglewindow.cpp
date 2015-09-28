@@ -60,23 +60,34 @@ void TriangleWindow::render()
     GLfloat vertices[] = {
         0.0f, 0.707f,
         -0.5f, -0.5f,
-        0.5f, -0.5f
+        0.5f, -0.5f,
+        0.5f, 1.0f,
+        0.5f, 0.5f,
+        1.0f, 0.5f
     };
 
     GLfloat colors[] = {
         1.0f, 0.0f, 1.0f,
         1.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f,
         0.0f, 1.0f, 1.0f
     };
 
+    //on remplie...
+    //Num du tableau, nb coordonnée par vertex (2D = 2), type, normalized, ?, pointeur sur données
     glVertexAttribPointer(m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, vertices);
     glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 0, colors);
 
+    //... puis active le tableau vertex attrib...
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    //on affiche le triangle
+    glDrawArrays(GL_TRIANGLES, 0, 6); //mode : forme final, indice du premier vertex, nb vertex
 
+    //on désactive le tableau vertex attrib
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
 

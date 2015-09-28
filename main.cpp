@@ -40,7 +40,7 @@
 
 #include <QtGui/QGuiApplication>
 
-#include "trianglewindow.h"
+#include "terraingenerator.h"
 
 int main(int argc, char **argv)
 {
@@ -49,7 +49,12 @@ int main(int argc, char **argv)
     QSurfaceFormat format;
     format.setSamples(16);
 
-    TriangleWindow window;
+//    TriangleWindow window;
+//    window.setFormat(format);
+//    window.resize(640, 480);
+//    window.show();
+
+    TerrainGenerator window(200, 200);
     window.setFormat(format);
     window.resize(640, 480);
     window.show();
