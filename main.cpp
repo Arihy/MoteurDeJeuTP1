@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 //    window.resize(640, 480);
 //    window.show();
 
-    TerrainGenerator window(200, 200);
+    TerrainGenerator window(240, 240);
     window.setFormat(format);
     window.resize(640, 480);
     window.show();

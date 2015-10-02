@@ -1,4 +1,5 @@
 #include "terraingenerator.h"
+#include <math.h>
 
 #define SIZE 8.0
 
@@ -65,17 +66,17 @@ void TerrainGenerator::initialize()
 
 void TerrainGenerator::generateTerrain()
 {
-    int ecart = 1;
-    GLfloat posX = 0;
-    GLfloat posZ = 0;
-    GLfloat scale = 0.05;
-
-//    system("pwd");
-//    exit(0);
+    float ecart = 1;
+    //GLfloat scale = 0.2f;
+    std::srand(time(NULL));
+    GLfloat random_integer1;
+    GLfloat random_integer2;
+    GLfloat random_integer3;
+    GLfloat random_integer4;
 
     QImage image;
-    if (QFile::exists(":/heightmap-1.png")) {
-        if(!image.load(":/heightmap-1.png"))
+    if (QFile::exists(":/heightmap-2.png")) {
+        if(!image.load(":/heightmap-2.png"))
         {
             std::cout << "image non chargé ";
             exit(0);
@@ -86,26 +87,41 @@ void TerrainGenerator::generateTerrain()
         std::cout << "image not found ";
     }
 
-    for(int x = 0; x < _height; x+=ecart)
+    for(int x = 0; x < image.height() - 1; x++)
     {
-        posX = x*scale;
+        //posX = x*scale;
         unsigned char* line = image.scanLine(x);
-        for(int z = 0; z < _width; z+=ecart)
+        unsigned char* line2 = image.scanLine(x+1);
+//        for(int i = 0; i < image.width(); i++)
+//            std::cout<< ((GLfloat) line[i])*0.01 << std::endl;
+        int cpt = 0;
+        for(int z = 0; z < image.width()-1; z++)
         {
-            posZ = z*scale;
+            random_integer1 = pow(1.f - 1.f/(GLfloat)line[z*4], 2);
+            random_integer2 = pow(1.f - 1.f/(GLfloat)line[(z*4)+4], 2);
+            random_integer3 = pow(1.f - 1.f/(GLfloat)line2[(z*4)+4], 2);
+            random_integer4 = pow(1.f - 1.f/(GLfloat)line2[(z*4)], 2);
+//            random_integer1 = (GLfloat)line[z]*0.01;
+//            random_integer2 = (GLfloat)line2[z]*0.01;
+//            random_integer3 = (GLfloat)line2[z+1]*0.01;
+//            random_integer4 = (GLfloat)line[z+1]*0.01;
+            std::cout<< random_integer1 << " - " << random_integer2 << " - " << random_integer3 << " - " << random_integer4 << std::endl;
+            //posZ = z*scale;
+            _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
+            _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
+            _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
             _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
             _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
             _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
 
-            ///////
-            GLfloat y = 1.f - 1.f/(GLfloat)line[z*4];
-            _map.push_back(posX); _map.push_back(y*2); _map.push_back(posZ);
-            _map.push_back(posX); _map.push_back(y*2); _map.push_back((z+ecart)*scale);
-            _map.push_back((x+ecart)*scale); _map.push_back(y*2); _map.push_back((z+ecart)*scale);
+            ///////(1.f - 1.f/(GLfloat)line[z])*4
+            _map.push_back(x); _map.push_back(random_integer1); _map.push_back(z);
+            _map.push_back(x); _map.push_back(random_integer2); _map.push_back((z) + ecart);
+            _map.push_back((x) + ecart); _map.push_back(random_integer3); _map.push_back((z)+ecart);
 
-            _map.push_back(posX); _map.push_back(y*2); _map.push_back(posZ);
-            _map.push_back((x+ecart)*scale); _map.push_back(y*2); _map.push_back((z+ecart)*scale);
-            _map.push_back((x+ecart)*scale); _map.push_back(y*2); _map.push_back(posZ);
+            _map.push_back(x); _map.push_back(random_integer1); _map.push_back(z);
+            _map.push_back((x)+ecart); _map.push_back(random_integer3); _map.push_back((z)+ecart);
+            _map.push_back((x)+ecart); _map.push_back(random_integer4); _map.push_back((z));
         }
     }
 }

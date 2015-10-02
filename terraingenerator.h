@@ -2,6 +2,9 @@
 #define TERRAINGENERATOR_H
 
 #include "openglwindow.h"
+#include <stdio.h>      /* printf, NULL */
+#include <stdlib.h>
+#include <time.h>
 
 #include <QtGui/QOpenGLShaderProgram>
 #include <QtGui/QScreen>
