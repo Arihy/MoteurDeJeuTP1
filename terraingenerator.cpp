@@ -1,5 +1,6 @@
 #include "terraingenerator.h"
 #include <math.h>
+#include <QVector3D>
 
 #define SIZE 8.0
 
@@ -66,17 +67,16 @@ void TerrainGenerator::initialize()
 
 void TerrainGenerator::generateTerrain()
 {
-    float ecart = 1;
-    //GLfloat scale = 0.2f;
-    std::srand(time(NULL));
-    GLfloat random_integer1;
-    GLfloat random_integer2;
-    GLfloat random_integer3;
-    GLfloat random_integer4;
+    float scale = .2f;
+
+    GLfloat y1;
+    GLfloat y2;
+    GLfloat y3;
+    GLfloat y4;
 
     QImage image;
-    if (QFile::exists(":/heightmap-2.png")) {
-        if(!image.load(":/heightmap-2.png"))
+    if (QFile::exists(":/heightmap-1.png")) {
+        if(!image.load(":/heightmap-1.png"))
         {
             std::cout << "image non chargé ";
             exit(0);
@@ -87,26 +87,17 @@ void TerrainGenerator::generateTerrain()
         std::cout << "image not found ";
     }
 
-    for(int x = 0; x < image.height() - 1; x++)
+    for(int x = 0; x < image.width() - 1; x++)
     {
-        //posX = x*scale;
-        unsigned char* line = image.scanLine(x);
-        unsigned char* line2 = image.scanLine(x+1);
-//        for(int i = 0; i < image.width(); i++)
-//            std::cout<< ((GLfloat) line[i])*0.01 << std::endl;
-        int cpt = 0;
-        for(int z = 0; z < image.width()-1; z++)
+        for(int z = 0; z < image.height() - 1; z++)
         {
-            random_integer1 = pow(1.f - 1.f/(GLfloat)line[z*4], 2);
-            random_integer2 = pow(1.f - 1.f/(GLfloat)line[(z*4)+4], 2);
-            random_integer3 = pow(1.f - 1.f/(GLfloat)line2[(z*4)+4], 2);
-            random_integer4 = pow(1.f - 1.f/(GLfloat)line2[(z*4)], 2);
-//            random_integer1 = (GLfloat)line[z]*0.01;
-//            random_integer2 = (GLfloat)line2[z]*0.01;
-//            random_integer3 = (GLfloat)line2[z+1]*0.01;
-//            random_integer4 = (GLfloat)line[z+1]*0.01;
-            std::cout<< random_integer1 << " - " << random_integer2 << " - " << random_integer3 << " - " << random_integer4 << std::endl;
-            //posZ = z*scale;
+            unsigned char* line = image.scanLine(z);
+            unsigned char* line2 = image.scanLine(z+1);
+            y1 = (((GLfloat)line[x*4])/255)*10;
+            y2 = (((GLfloat)line[(x*4)+4])/255)*10;
+            y3 = (((GLfloat)line2[(x*4)])/255)*10;
+            y4 = (((GLfloat)line2[(x*4)+4])/255)*10;
+
             _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
             _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
             _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
@@ -114,14 +105,13 @@ void TerrainGenerator::generateTerrain()
             _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
             _color.push_back(1.0f); _color.push_back(1.0f); _color.push_back(1.0f);
 
-            ///////(1.f - 1.f/(GLfloat)line[z])*4
-            _map.push_back(x); _map.push_back(random_integer1); _map.push_back(z);
-            _map.push_back(x); _map.push_back(random_integer2); _map.push_back((z) + ecart);
-            _map.push_back((x) + ecart); _map.push_back(random_integer3); _map.push_back((z)+ecart);
+            _map.push_back(x*scale); _map.push_back(y1); _map.push_back(z*scale);
+            _map.push_back((x+1)*scale); _map.push_back(y2); _map.push_back(z*scale);
+            _map.push_back(x*scale); _map.push_back(y3); _map.push_back((z+1)*scale);
 
-            _map.push_back(x); _map.push_back(random_integer1); _map.push_back(z);
-            _map.push_back((x)+ecart); _map.push_back(random_integer3); _map.push_back((z)+ecart);
-            _map.push_back((x)+ecart); _map.push_back(random_integer4); _map.push_back((z));
+            _map.push_back((x+1)*scale); _map.push_back(y2); _map.push_back(z*scale);
+            _map.push_back(x*scale); _map.push_back(y3); _map.push_back((z+1)*scale);
+            _map.push_back((x+1)*scale); _map.push_back(y4); _map.push_back((z+1)*scale);
         }
     }
 }
@@ -180,16 +170,16 @@ void TerrainGenerator::keyPressEvent(QKeyEvent *keyEvent)
             _wireFrame = !_wireFrame;
             break;
         case Qt::Key_Z:
-            _camZ += 0.1;
+            _camZ += 0.5;
             break;
         case Qt::Key_S:
-            _camZ -= 0.1;
+            _camZ -= 0.5;
             break;
         case Qt::Key_Q:
-            _camX += 0.1;
+            _camX += 0.5;
             break;
         case Qt::Key_D:
-            _camX -= 0.1;
+            _camX -= 0.5;
             break;
         case Qt::Key_P:
             _camY += 0.1;
